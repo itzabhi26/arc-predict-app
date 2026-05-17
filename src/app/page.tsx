@@ -1,5 +1,7 @@
 'use client'
 
+export const dynamic = 'force-dynamic';
+
 import { ConnectButton } from '@rainbow-me/rainbowkit';
 import { useState } from 'react';
 import { useAccount, useBalance, useSendTransaction } from 'wagmi';
@@ -23,7 +25,7 @@ export default function Home() {
   // Wagmi v2 Send Transaction
   const { sendTransaction, isPending: isSending } = useSendTransaction();
 
-  // Prediction Markets Dummy Data (ARC Chain Core Concept)
+  // Prediction Markets Dummy Data
   const markets = [
     { id: 1, title: "Will Bitcoin cross $95,000 this month?", pool: "25,430 USDC", yesOdds: "1.8x", noOdds: "2.1x" },
     { id: 2, title: "Will ARC Chain Mainnet launch be in Q3?", pool: "12,900 USDC", yesOdds: "1.5x", noOdds: "3.0x" },
@@ -34,15 +36,15 @@ export default function Home() {
     ? (Number(balance.value) / 10 ** balance.decimals).toFixed(4) 
     : '0.00';
 
-  // Handling the Prediction Bet
   const handlePlaceBet = () => {
     if (!betAmount || !selectedPrediction) {
       alert("Please enter amount and select YES or NO");
       return;
     }
-    // Sending transaction to a target market address (or smart contract)
+    
+    // ARC Chain Smart Contract Address Template
     sendTransaction({
-      to: '0x0000000000000000000000000000000000000000', // Smart Contract placeholder
+      to: '0x0000000000000000000000000000000000000000',
       value: parseEther(betAmount),
     });
   };
@@ -67,7 +69,7 @@ export default function Home() {
         <div className="p-6 rounded-[2.5rem] shadow-xl bg-gradient-to-br from-purple-700 via-purple-800 to-indigo-900 text-white">
           <p className="text-[10px] font-bold opacity-70 uppercase tracking-widest">Your Prediction Power</p>
           <h2 className="text-3xl font-black mt-1">
-            {isConnected ? `${displayBalance} ${balance?.symbol}` : `0.00 USDC`}
+            {isConnected ? `${displayBalance} ${balance?.symbol || 'USDC'}` : `0.00 USDC`}
           </h2>
         </div>
 
